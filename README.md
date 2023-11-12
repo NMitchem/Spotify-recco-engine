@@ -20,15 +20,9 @@ This project provides a basic Spotify recommendation system. It leverages the Sp
 ## Usage
 To use this recommendation system:
 1. Provide your Spotify API credentials in the script via a .env file.
-2. Run `fileGeneration.py` to scrape song data from some of the top playlist producers on Spotify.
-3. Run `dataTransform.py` and pass in an artist to draw recommendations from.
-
-## Contributing
-Contributions to improve the functionality or efficiency of the system are welcome. Please adhere to the project's code style and contribute via pull requests.
+2. Run `python fileGeneration.py` to scrape song data from some of the top playlist producers on Spotify.
+3. Run `python dataTransform.py artistname`to and pass in an artist to draw song recommendations from.
 
 ## Authors and Acknowledgment
-- [Your Name] - Initial work
-- Acknowledgments to any contributors or inspirations.
-
-## License
-This project is licensed under the [LICENSE] - see the file for details.
+- This code is inspired by [a series on Medium.com](https://medium.com/@enjui.chang/enhance-your-playlists-with-machine-learning-spotify-automatic-playlist-continuation-2aae2c926e77)
+- [Noah Mitchem] - Code implementation
