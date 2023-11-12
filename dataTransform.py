@@ -181,4 +181,7 @@ if __name__ == "__main__":
 
     complete_feature_set_playlist_vector, complete_feature_set_nonplaylist = generate_artist_feature(temp, unfiltered[unfiltered["artist"] == artist])
     recommend = generate_playlist_recos(data, complete_feature_set_playlist_vector, complete_feature_set_nonplaylist)
-    recommend.to_csv("recommend.csv", index = False)
+    recommend[["name", "artist"]].to_csv("recommendations.csv", index = False)
+
+
+
