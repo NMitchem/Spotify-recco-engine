@@ -1,13 +1,9 @@
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
-import re 
 import pandas as pd
 from textblob import TextBlob
 from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.metrics import nan_euclidean_distances
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.decomposition import PCA
+import sys
 
 def getSubjectivity(text):
     '''
@@ -170,6 +166,8 @@ def generate_playlist_recos(df, features, nonplaylist_features):
 
 
 if __name__ == "__main__":
+    artist = " ".join(sys.argv[1:])
+    print(artist)
     data = pd.read_csv("songs.csv")
     unfiltered = pd.read_csv("songs.csv")
     #Drop useless info
@@ -181,7 +179,6 @@ if __name__ == "__main__":
     float_cols = data.dtypes[data.dtypes == 'float64'].index.values
     temp = create_feature_set(data, float_cols)
 
-    artist = "The Strokes"
     complete_feature_set_playlist_vector, complete_feature_set_nonplaylist = generate_artist_feature(temp, unfiltered[unfiltered["artist"] == artist])
     recommend = generate_playlist_recos(data, complete_feature_set_playlist_vector, complete_feature_set_nonplaylist)
     recommend.to_csv("recommend.csv", index = False)
