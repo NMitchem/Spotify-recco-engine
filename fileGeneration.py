@@ -16,24 +16,55 @@ cid = os.environ.get("CID")
 secret = os.environ.get("SECRET")
 
 def playlist_grab(users):
-    songs = []
+    '''
+    Load playlists for a given user and extract name and URI from each playlist
+    ---
+    Input:
+    List of spotify users with public playlists
+
+    Output:
+    A list of playlist names and URIs
+
+    '''
+    playlist_list = []
     for user in users:
         playlists = sp.user_playlists(user)
         while playlists:
             for playlist in playlists['items']:
-                songs.append([playlist["name"], playlist['uri']])
+                playlist_list.append([playlist["name"], playlist['uri']])
             if playlists['next']:
                 playlists = sp.next(playlists)
             else:
                 playlists = None
-    return songs
+    return playlist_list
 
 def playlist_extract(playlist_name, uri):
+
+    '''
+    Extract songs for each playlist name / URI
+    ---
+    Input:
+    List of playlist name and URIs
+
+    Output:
+    A list of song data for a given playlist
+    '''
+
    # Define a common list to extract data to
     all_data = []
 
    # Define an inner function to grab data and manipulate it 
     def tracks_to_features(uris, playlist_name):
+
+        '''
+        A helper function that extracts song data given a URI for a song
+        ---
+        Input:
+        Song URIs and playlist_name
+
+        Output:
+        A list of song data for a given list of URIs
+        '''
         feature_list = sp.audio_features(uris)
         tracks = sp.tracks(uris)
         tracks = tracks["tracks"]
@@ -70,7 +101,7 @@ def playlist_extract(playlist_name, uri):
         try:
             tracks.append(i["track"]["uri"])
         except:
-            1==1
+            continue
     length = len(tracks)
     #Can only process 50 tracks at a time via API
     if length > 50:
@@ -80,7 +111,7 @@ def playlist_extract(playlist_name, uri):
                 tracks_to_features(subset, playlist_name)
             except:
                 # Bad track in the data
-                1==1
+                continue
     else:
         try:
             tracks_to_features(tracks, playlist_name)
@@ -104,6 +135,5 @@ if __name__ == "__main__":
     for i in songs:
         df_list = df_list + playlist_extract(i[0], i[1])
     data = pd.DataFrame(df_list)
-    data.to_csv('songs.csv', index = False)
     data = drop_duplicates(data)
     data.to_csv('songs.csv', index = False)

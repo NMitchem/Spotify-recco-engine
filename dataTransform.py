@@ -74,7 +74,7 @@ def create_feature_set(df, float_cols):
     # Tfidf genre lists
     tfidf = TfidfVectorizer()
     tfidf_matrix = tfidf.fit_transform(df['genres'].apply(lambda x: " ".join(x)))
-    genre_df = pd.DataFrame((tfidf_matrix.toarray() + 1) * 0.18)
+    genre_df = pd.DataFrame((tfidf_matrix.toarray() + 1) * 0.2)
     genre_df.columns = ['genre' + "|" + i for i in tfidf.get_feature_names_out()]
     genre_df.drop(columns='genre|unknown') # drop unknown genre
     genre_df.reset_index(drop = True, inplace=True)
@@ -85,10 +85,10 @@ def create_feature_set(df, float_cols):
     # One-hot Encoding
     subject_ohe = ohe_prep(df, 'subjectivity','subject') * 0.1
     polar_ohe = ohe_prep(df, 'polarity','polar') * 0.1
-    key_ohe = ohe_prep(df, 'key','key') * 0.1
+    key_ohe = ohe_prep(df, 'key','key') * 0.2
     mode_ohe = ohe_prep(df, 'mode','mode') * 0.3
 
-    # Normalization
+    # Min Max scale
     # Scale popularity columns
     pop = df[["artist_pop","track_pop"]].reset_index(drop = True)
     scaler = MinMaxScaler()
@@ -166,8 +166,9 @@ def generate_playlist_recos(df, features, nonplaylist_features):
 
 
 if __name__ == "__main__":
+    # Grab artist name from args
     artist = " ".join(sys.argv[1:])
-    print(artist)
+    # Read in data
     data = pd.read_csv("songs.csv")
     unfiltered = pd.read_csv("songs.csv")
     #Drop useless info
@@ -177,10 +178,15 @@ if __name__ == "__main__":
     data["genres"] = data.genres.str.split(" ")
     data['name'] = data.name.astype(str)
     float_cols = data.dtypes[data.dtypes == 'float64'].index.values
+
+    #Create feature set
     temp = create_feature_set(data, float_cols)
 
+    #Generate artist features and playlist reccomendations
     complete_feature_set_playlist_vector, complete_feature_set_nonplaylist = generate_artist_feature(temp, unfiltered[unfiltered["artist"] == artist])
     recommend = generate_playlist_recos(data, complete_feature_set_playlist_vector, complete_feature_set_nonplaylist)
+
+    #Write recommendations to a csv file
     recommend[["name", "artist"]].to_csv("recommendations.csv", index = False)
 
 
