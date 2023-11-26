@@ -74,7 +74,7 @@ def create_feature_set(df, float_cols):
     # Tfidf genre lists
     tfidf = TfidfVectorizer()
     tfidf_matrix = tfidf.fit_transform(df['genres'].apply(lambda x: " ".join(x)))
-    genre_df = pd.DataFrame((tfidf_matrix.toarray() + 1) * 0.2)
+    genre_df = pd.DataFrame((tfidf_matrix.toarray() + 1) * 0.3)
     genre_df.columns = ['genre' + "|" + i for i in tfidf.get_feature_names_out()]
     genre_df.drop(columns='genre|unknown') # drop unknown genre
     genre_df.reset_index(drop = True, inplace=True)
@@ -84,20 +84,20 @@ def create_feature_set(df, float_cols):
 
     # One-hot Encoding
     subject_ohe = ohe_prep(df, 'subjectivity','subject') * 0.1
-    polar_ohe = ohe_prep(df, 'polarity','polar') * 0.1
+    polar_ohe = ohe_prep(df, 'polarity','polar') * 0.2
     key_ohe = ohe_prep(df, 'key','key') * 0.2
-    mode_ohe = ohe_prep(df, 'mode','mode') * 0.3
+    mode_ohe = ohe_prep(df, 'mode','mode') * 0.2
 
     # Min Max scale
     # Scale popularity columns
     pop = df[["artist_pop","track_pop"]].reset_index(drop = True)
     scaler = MinMaxScaler()
-    pop_scaled = pd.DataFrame(scaler.fit_transform(pop), columns = pop.columns) * 0.4 
+    pop_scaled = pd.DataFrame(scaler.fit_transform(pop), columns = pop.columns) * 0.5
 
     # Scale audio columns
     floats = df[float_cols].reset_index(drop = True)
     scaler = MinMaxScaler()
-    floats_scaled = pd.DataFrame(scaler.fit_transform(floats), columns = floats.columns) * 0.6
+    floats_scaled = pd.DataFrame(scaler.fit_transform(floats), columns = floats.columns) * 0.5
 
     # Concanenate all features
     final = pd.concat([genre_df, floats_scaled, pop_scaled, subject_ohe, polar_ohe, key_ohe, mode_ohe], axis = 1)
