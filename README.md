@@ -23,7 +23,7 @@ To use this recommendation system:
 2. Run `python fileGeneration.py` to scrape song data from some of the top playlist producers on Spotify.
 3. Run `python dataTransform.py artistname`to and pass in an artist to draw song recommendations from.
 4. `Recommendations.csv` is generated with 40 sorted recommendations
-![Usage](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExbm54aWxtcDAybDl0cGVpenNuODltc3Q2d3JpdGkwYjMyYWExMDZzbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/uDa8i4tHogwuppZpQA/giphy.gif)
 ## Authors and Acknowledgment
 - This code is inspired by [a series on Medium.com](https://medium.com/@enjui.chang/enhance-your-playlists-with-machine-learning-spotify-automatic-playlist-continuation-2aae2c926e77)
 - Noah Mitchem - Code implementation
+![](http://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExbm54aWxtcDAybDl0cGVpenNuODltc3Q2d3JpdGkwYjMyYWExMDZzbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/uDa8i4tHogwuppZpQA/giphy.gif)
